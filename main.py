@@ -1,14 +1,15 @@
-from fastapi import FastAPI, Request  # ✅ import de Request ajouté
+from fastapi import FastAPI, Request
 import requests
 import os
 
 app = FastAPI()
 
+# Ces variables doivent être définies dans l'environnement Render
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("SECRET_ID")
 TENANT_ID = os.getenv("TENANT_ID")
 
-def get_token():  # ✅ fonction manquante ajoutée
+def get_token():
     token_url = f"https://login.microsoftonline.com/{TENANT_ID}/oauth2/v2.0/token"
     payload = {
         "grant_type": "client_credentials",
@@ -16,8 +17,8 @@ def get_token():  # ✅ fonction manquante ajoutée
         "client_secret": CLIENT_SECRET,
         "scope": "https://graph.microsoft.com/.default"
     }
-    token_response = requests.post(token_url, data=payload)
-    return token_response.json().get("access_token")
+    response = requests.post(token_url, data=payload)
+    return response.json().get("access_token")
 
 @app.get("/graph")
 def call_graph_api():
@@ -45,3 +46,7 @@ async def create_event(req: Request):
     url = "https://graph.microsoft.com/v1.0/users/vdhers@jbbernard.fr/events"
     response = requests.post(url, headers=headers, json=data)
     return response.json()
+
+@app.get("/ping")
+def ping():
+    return {"status": "ok"}
