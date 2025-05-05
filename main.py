@@ -6,7 +6,7 @@ import os
 app = FastAPI()
 
 CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+CLIENT_SECRET = os.getenv("SECRET_ID")
 TENANT_ID = os.getenv("TENANT_ID")
 
 @app.get("/graph")
